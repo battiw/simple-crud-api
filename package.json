@@ -1,0 +1,27 @@
+{
+  "name": "task_3_simple-crud-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/battiw/simple-crud-api.git"
+  },
+  "author": "Wit",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/battiw/simple-crud-api/issues"
+  },
+  "homepage": "https://github.com/battiw/simple-crud-api#readme",
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "dotenv": "^10.0.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
