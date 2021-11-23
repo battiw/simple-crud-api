@@ -53,7 +53,9 @@ const server = http.createServer(( request, response ) => {
                    console.log(` JSON.parse(dS) => ${JSON.stringify(dS)}`)
                     console.log(`dS => ${typeof dS}`);
 
-                    db.dbUsers.push(dS)
+                    let newArrei = db.dbUsers.push(dS)
+                    console.log(`finishd=> ${db.dbUsers}`)
+                    console.log(`finishd1=> ${JSON.stringify(db.dbUsers)}`)
 
                     response.setHeader("Content-Type", "json/application");
                     response.statusCode = 200;
