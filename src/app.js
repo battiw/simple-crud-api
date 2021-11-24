@@ -1,5 +1,4 @@
-const db = require("./db")
-const { parse } = require('querystring');
+// const { parse } = require('querystring');
 const fs = require("fs");
 const url = require("url");
 const http = require("http");
@@ -8,71 +7,98 @@ const dotenv = require("dotenv");
 const { v4: uuidv4 } = require( 'uuid' );
 
 dotenv.config();
-console.log(process.env.PORT)
-console.log(process.env.NODE_ENV)
+uuidv4();
+const PORT = process.env.PORT;
+console.log(PORT)
 
-const PORT = process.env.PORT
-
-uuidv4()
-for (let i=0; i <= 10; i++){
-    console.log(uuidv4())
-};
-
-let p = path.resolve('db.js');
-console.log(`db => ${p}`)
-
+ let arreiUsers = []; // массив users
+ let idSearch = []; // массив id
 const server = http.createServer(( request, response ) => {
+ 
+    idSearch.push(uuidv4()); // находим в массиве id и заносим их в массив
+    
     if ( request.url === '/person') {
-        if  ( request.method === "GET" ) {
-            let stringDB = JSON.stringify(db.dbUsers);
-            console.log(`stringDB => ${stringDB}`)
-            console.log(`stringDB => ${typeof stringDB}`)
+
+        if ( request.method === "GET") {
+            let stringDB = JSON.stringify(arreiUsers);
             response.setHeader("Content-Type", "json/application");
             response.statusCode = 200;
             response.end(stringDB);
                 
         } else if( request.method === "POST" ) {
-            console.log("hello")
-            fs.access(p, fs.constants.R_OK, err => {
-                if(err){
-                    response.statusCode = 404;
-                    response.end("File not found!");
-                } else {
-                    let dataStrim = "";
-                    request.on( "data", ( chunk ) => {
-                    dataStrim += chunk.toString();
-                    });
-                    request.on( "end", () => {
-                    console.log(`dataStrim => ${dataStrim}`);
-                    console.log(`dataStrim => ${typeof dataStrim}`);
-                    console.log(`db.dbUsers => ${db.dbUsers}`);
-                    console.log(`db.dbUsers => ${JSON.stringify( db.dbUsers)}`);
-                    console.log(`db.dbUsers => ${typeof db.dbUsers}`);
-                    let dS = JSON.parse(dataStrim)
-                    console.log(`dS => ${dS}`);
-                   console.log(` JSON.parse(dS) => ${JSON.stringify(dS)}`)
-                    console.log(`dS => ${typeof dS}`);
+            
+            let dataStrim = "";
+            request.on( "data", ( chunk ) => {
+            dataStrim += chunk.toString();
+            });
+            request.on( "end", () => {
+            let strimObjekt = JSON.parse(dataStrim); // парсим строку в объект
+            let idU = uuidv4(); // создаем id
+            strimObjekt.id=idU; //вставляем его в объект 1 номером
+            arreiUsers.push(strimObjekt); // добавляем объект в массив
+            let outStrim = JSON.stringify(arreiUsers);
+            response.setHeader("Content-Type", "json/application");
+            response.statusCode = 200;
+            response.write(outStrim);
+            response.end();
+            });
+        }; 
 
-                    let newArrei = db.dbUsers.push(dS)
-                    console.log(`finishd=> ${db.dbUsers}`)
-                    console.log(`finishd1=> ${JSON.stringify(db.dbUsers)}`)
+    } else if ( request.url.startsWith( '/person/' ) && request.method === "GET" ) {
 
-                    response.setHeader("Content-Type", "json/application");
-                    response.statusCode = 200;
-                    response.end(dataStrim);
-  
-                    })
-                
-                }
-            })
-        } 
-    }   
-}).listen(PORT, () => {console.log(`Server started PORT => ${PORT}`)});
+        let idSlice = request.url.slice(8); //обрезаем строку запроса для выделения id
+        let idOdject = arreiUsers.find( function (item) {
+            if ( item.id == idSlice ) {
+            return item;
+            };      
+        }); // возвращаем из массива объект с заданным id   
+        let stringDB = JSON.stringify( idOdject );
+        response.setHeader( "Content-Type", "json/application" );
+        response.statusCode = 200;
+        response.end( stringDB );
+      
+    } else if (request.url.startsWith('/person/') && request.method === "DELETE" ) {
+            
+        let idSlice = request.url.slice( 8 ); //обрезаем строку запроса для выделения id
+        let indexDelete = arreiUsers.findIndex( function ( item ) {
+        if ( item.id == idSlice );
+        return item;
+        });
+        arreiUsers.splice( indexDelete, 1);
+        response.setHeader( "Content-Type", "json/application" );
+        response.statusCode = 200;
+        response.end( `DELETE USER in ID => ${idSlice}` );
 
+    } else if ( request.url.startsWith( '/person/' ) && request.method === "PUT" ) {
 
+        let idSlice = request.url.slice( 8 ); //обрезаем строку запроса для выделения id
+        let dataStrimPut = "";
+            request.on( "data", ( chunk ) => {
+            dataStrimPut += chunk.toString();
+        });
+        request.on( "end", () => {
+            let strimObjektPut = JSON.parse( dataStrimPut ); // парсим строку в объект
+            let arreyPut = arreiUsers.map( function( item ) {
+                if ( item.id == idSlice ) {
+                    item.name = strimObjektPut.name;
+                    item.age = strimObjektPut.age;
+                    item.hobbies = strimObjektPut.hobbies;
+                };
+                    return item;
+                }); 
+            let outStrimPut = JSON.stringify( arreyPut );
+            response.setHeader( "Content-Type", "json/application" );
+            response.statusCode = 200;
+            response.write( outStrimPut );
+            response.end();
+        });
+    } else {
 
+        console.log ("ERROR") 
+        response.setHeader( "Content-Type", "json/application" );
+        response.statusCode = 404;
+        response.write( "ERROR" );
+        response.end();
 
-
-
-
-
+    };
+}).listen( PORT, () => { console.log( `Server started PORT => ${PORT}` ) });
