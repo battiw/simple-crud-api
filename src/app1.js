@@ -15,28 +15,28 @@ const PORT = process.env.PORT;
  let idSearch = []; // массив id
 const server = http.createServer(( request, response ) => {
  
-    idSearch.push(uuidv4()); // находим в массиве id и заносим их в массив
+    idSearch.push( uuidv4() ); // находим в массиве id и заносим их в массив
     
-    if ( request.url === '/person') {
+    if ( request.url === '/person' ) {
 
         if ( request.method === "GET") {
             getModule.getUser( arreiUsers, response );
                 
         } else if( request.method === "POST" ) {
-            postModule.postUser(request, uuidv4(), arreiUsers, response);
+            postModule.postUser( request, uuidv4(), arreiUsers, response );
 
         }; 
     } else if ( request.url.startsWith( '/person/' ) && request.method === "GET" ) {
-        getModuleID.getId(request.url, arreiUsers, response);
+        getModuleID.getId( request.url, arreiUsers, response );
       
-    } else if (request.url.startsWith('/person/') && request.method === "DELETE" ) {
-        let idDelUser = deleteModule.deleteUser(request.url, arreiUsers, response)
+    } else if ( request.url.startsWith('/person/' ) && request.method === "DELETE" ) {
+        deleteModule.deleteUser( request.url, request, arreiUsers, response );
 
     } else if ( request.url.startsWith( '/person/' ) && request.method === "PUT" ) {
         putModule.putUser(request.url, request, arreiUsers, response);
 
     } else {
-        console.log ("ERROR") 
+        console.log ("ERROR"); 
         response.setHeader( "Content-Type", "json/application" );
         response.statusCode = 404;
         response.write( "ERROR" );
