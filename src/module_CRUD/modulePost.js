@@ -1,6 +1,9 @@
 
 let outStrim
 let postUser = function(request, uuidv4, arreiUsers, response ) {
+
+
+
     let dataStrim = "";
     request.on( "data", ( chunk ) => {
         dataStrim += chunk.toString();
@@ -29,6 +32,8 @@ let postUser = function(request, uuidv4, arreiUsers, response ) {
                 response.end();
             }
     });
+
+
 }
 
 module.exports.postUser = postUser;

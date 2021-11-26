@@ -16,42 +16,52 @@ const PORT = process.env.PORT;
 
 const server = http.createServer(( request, response ) => {
 
-        let sampleID = /^\/person\/[0-9a-z]{8}\-[0-9a-z]{4}\-[0-9a-z]{4}\-[0-9a-z]{4}\-[0-9a-z]{12}$/.test( request.url );
+    let sampleID = /^\/person\/[0-9a-z]{8}\-[0-9a-z]{4}\-[0-9a-z]{4}\-[0-9a-z]{4}\-[0-9a-z]{12}$/.test( request.url );
+    
+    try {
+            if ( request.url === '/person' ) {
+                    if ( request.method === "GET" ) {
+                        getModule.getUser( arreiUsers, response );
 
-        if ( request.url === '/person' ) {
+                    } else if( request.method === "POST" ) {
+                        postModule.postUser( request, uuidv4(), arreiUsers, response );
+                    }; 
+            
+            } else if ( request.url.startsWith( '/person/') &&  sampleID == true) {
 
-                if ( request.method === "GET" ) {
-                    getModule.getUser( arreiUsers, response );
-                } else if( request.method === "POST" ) {
-                    postModule.postUser( request, uuidv4(), arreiUsers, response );
-                }; 
-        
-        } else if ( request.url.startsWith( '/person/') &&  sampleID == true) {
+                    if ( sampleID == true ) {
+                        
+                        if (  request.method === "GET" ) {
+                            getModuleID.getId( request.url, arreiUsers, response );
 
-            if ( sampleID == true ) {
-                if (  request.method === "GET" ) {
-                    getModuleID.getId( request.url, arreiUsers, response );
+                        } else if ( request.method === "DELETE" ) {
+                            deleteModule.deleteUser( request.url, request, arreiUsers, response );
 
-                } else if ( request.method === "DELETE" ) {
-                    deleteModule.deleteUser( request.url, request, arreiUsers, response );
-
-                } else if ( request.method === "PUT" ) {
-                    putModule.putUser(request.url, request, arreiUsers, response);
-                };
+                        } else if ( request.method === "PUT" ) {
+                            putModule.putUser(request.url, request, arreiUsers, response);
+                        };
+                
+                    } else {
+                        response.setHeader( "Content-Type", "json/application" );
+                        response.statusCode = 404;
+                        response.write( "The entered ID was not found!" );
+                        response.end();
+                    };
 
             } else {
-                response.setHeader( "Content-Type", "json/application" );
                 response.statusCode = 404;
-                response.write( "The entered ID was not found!" );
+                response.setHeader( "Content-Type", "json/application" );
+                response.write( "You entered a request for a non-existent resource. Check the URL." );
                 response.end();
             };
-            
-        } else {
-            response.setHeader( "Content-Type", "json/application" );
-            response.statusCode = 404;
-            response.write( "You entered a request for a non-existent resource. Check the URL." );
-            response.end();
-        };
+
+    } catch( err ) {
+        response.statusCode = 500;
+        response.setHeader( "Content-Type", "json/application" );
+        response.write( "ERROR" );
+        response.end();
+    };
+
 }).listen( PORT, () => { console.log( `Server started PORT => ${PORT}` ) });
 
 
