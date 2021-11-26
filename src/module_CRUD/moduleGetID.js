@@ -28,7 +28,7 @@ let getId = function(urlPach, arreiUsers, response) {
 
             response.setHeader( "Content-Type", "json/application" );
             response.statusCode = 400;
-            response.write( "The ID config is not valid!!!\n The user ID must match the UUID." );
+            response.write( "The ID config is not valid!!!\n The user ID must match the UUID 1." );
             response.end();
         }
 };

@@ -1,6 +1,6 @@
 let idSlice;
 let deleteUser = function( urlPach, request, arreiUsers, response) {
-
+console.log(`gelete => ${urlPach}`)
     let idSlice = urlPach.slice( 8 ); //обрезаем строку запроса для выделения id
     let validId = /^[0-9a-z]{8}\-[0-9a-z]{4}\-[0-9a-z]{4}\-[0-9a-z]{4}\-[0-9a-z]{12}$/.test(idSlice);
 
@@ -30,7 +30,15 @@ let deleteUser = function( urlPach, request, arreiUsers, response) {
             response.end();
         };
 
-    } else {
+    // } else if() {
+
+
+
+
+
+    }   
+    
+    else {
         response.statusCode = 400;
         response.setHeader( "Content-Type", "json/application" );
         response.write( "The ID config is not valid!!!\n The user ID must match the UUID." );
