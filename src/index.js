@@ -15,10 +15,11 @@ const PORT = process.env.PORT;
  let idSearch = []; // массив id
 
 const server = http.createServer(( request, response ) => {
-
     let sampleID = /^\/person\/[0-9a-z]{8}\-[0-9a-z]{4}\-[0-9a-z]{4}\-[0-9a-z]{4}\-[0-9a-z]{12}$/.test( request.url );
     
     try {
+       // throw new Error () при проверки 500 ошибки необходимо раскоментировать
+
             if ( request.url === '/person' ) {
                     if ( request.method === "GET" ) {
                         getModule.getUser( arreiUsers, response );
@@ -58,7 +59,7 @@ const server = http.createServer(( request, response ) => {
     } catch( err ) {
         response.statusCode = 500;
         response.setHeader( "Content-Type", "json/application" );
-        response.write( "ERROR" );
+        response.write( "Server Error" );
         response.end();
     };
 
