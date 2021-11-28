@@ -1,5 +1,4 @@
 const http = require("http");
-const dotenv = require("dotenv");
 const { v4: uuidv4 } = require( 'uuid' );
 const deleteModule = require("./module_CRUD/moduleDelete")
 const getModuleID = require("./module_CRUD/moduleGetID")
@@ -7,14 +6,13 @@ const postModule = require("./module_CRUD/modulePost")
 const getModule = require("./module_CRUD/moduleGet")
 const putModule = require("./module_CRUD/modulePut")
 
-dotenv.config();
 uuidv4();
-const PORT = process.env.PORT;
 
  let arreiUsers = []; // массив users
- let idSearch = []; // массив id
+//  let idSearch = []; // массив id
 
 const server = http.createServer(( request, response ) => {
+
     let sampleID = /^\/person\/[0-9a-z]{8}\-[0-9a-z]{4}\-[0-9a-z]{4}\-[0-9a-z]{4}\-[0-9a-z]{12}$/.test( request.url );
     
     try {
@@ -44,13 +42,13 @@ const server = http.createServer(( request, response ) => {
                 
                     } else {
                         response.setHeader( "Content-Type", "json/application" );
-                        response.statusCode = 404;
+                        response.statusCode = 405;
                         response.write( "The entered ID was not found!" );
                         response.end();
                     };
 
             } else {
-                response.statusCode = 404;
+                response.statusCode = 406;
                 response.setHeader( "Content-Type", "json/application" );
                 response.write( "You entered a request for a non-existent resource. Check the URL." );
                 response.end();
@@ -62,8 +60,10 @@ const server = http.createServer(( request, response ) => {
         response.write( "Server Error" );
         response.end();
     };
+});
 
-}).listen( PORT, () => { console.log( `Server started PORT => ${PORT}` ) });
+module.exports.server = server;
+module.exports.uuidv = uuidv4;
 
 
 

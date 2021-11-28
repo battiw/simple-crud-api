@@ -1,5 +1,5 @@
 let putUser = function( urlPach, request, arreiUsers, response ) {
-    let idSlice = urlPach.slice( 8 ); //обрезаем строку запроса для выделения id
+    let idSlice = urlPach.slice( 8 ); 
     let validId = /^[0-9a-z]{8}\-[0-9a-z]{4}\-[0-9a-z]{4}\-[0-9a-z]{4}\-[0-9a-z]{12}$/.test(idSlice);
 
     let elementArrey;
@@ -10,7 +10,7 @@ let putUser = function( urlPach, request, arreiUsers, response ) {
     });
     request.on( "end", () => {
 
-        let strimObjektPut = JSON.parse(dataStrimPut); // парсим строку в объект
+        let strimObjektPut = JSON.parse(dataStrimPut); 
 
         if (validId == true){
 
@@ -20,7 +20,7 @@ let putUser = function( urlPach, request, arreiUsers, response ) {
                 };
             });
 
-            if ( elementArrey ){
+            if ( elementArrey ) {
                 elementArrey.name = strimObjektPut.name;
                 elementArrey.age = strimObjektPut.age;
                 elementArrey.hobbies = strimObjektPut.hobbies;
@@ -39,7 +39,6 @@ let putUser = function( urlPach, request, arreiUsers, response ) {
                 response.end();
             };
             
-
         } else {
             response.statusCode = 400;
             response.setHeader( "Content-Type", "json/application" );

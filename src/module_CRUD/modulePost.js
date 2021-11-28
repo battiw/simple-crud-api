@@ -1,22 +1,18 @@
-
-let outStrim
 let postUser = function(request, uuidv4, arreiUsers, response ) {
-
-
 
     let dataStrim = "";
     request.on( "data", ( chunk ) => {
         dataStrim += chunk.toString();
     });
     request.on( "end", () => {
-        let strimObjekt = JSON.parse(dataStrim); // парсим строку в объект
-        let idU = uuidv4; // создаем id
-        strimObjekt.id=idU; //вставляем его в объект 1 номером
+        let strimObjekt = JSON.parse(dataStrim); 
+        let idU = uuidv4; 
+        strimObjekt.id=idU; 
 
-            if ( "name" in strimObjekt &&  "age" in strimObjekt && "hobbies" in strimObjekt){
+            if ( "name" in strimObjekt &&  "age" in strimObjekt && "hobbies" in strimObjekt ) {
 
-                arreiUsers.push(strimObjekt); // добавляем объект в массив
-                outStrim = JSON.stringify(arreiUsers);
+                arreiUsers.push(strimObjekt); 
+                let outStrim = JSON.stringify(strimObjekt);
                  
                 response.setHeader("Content-Type", "json/application");
                 response.statusCode = 201;
@@ -27,14 +23,10 @@ let postUser = function(request, uuidv4, arreiUsers, response ) {
             } else {
                 response.statusCode = 400;
                 response.setHeader("Content-Type", "json/application");
-               
                 response.write("Check the entered data !!!");
                 response.end();
-            }
+            };
     });
-
-
-}
+};
 
 module.exports.postUser = postUser;
-module.exports.outStrim = outStrim;

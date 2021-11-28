@@ -1,7 +1,6 @@
 let idSlice;
 let deleteUser = function( urlPach, request, arreiUsers, response) {
-console.log(`gelete => ${urlPach}`)
-    let idSlice = urlPach.slice( 8 ); //обрезаем строку запроса для выделения id
+    let idSlice = urlPach.slice( 8 ); 
     let validId = /^[0-9a-z]{8}\-[0-9a-z]{4}\-[0-9a-z]{4}\-[0-9a-z]{4}\-[0-9a-z]{12}$/.test(idSlice);
 
     let elementArrey;
@@ -17,7 +16,6 @@ console.log(`gelete => ${urlPach}`)
         });
 
         if ( elementArrey ){
-                
             arreiUsers.splice( elementIndex, 1 );
             response.statusCode = 204;
             response.setHeader( "Content-Type", "json/application" );
@@ -30,15 +28,7 @@ console.log(`gelete => ${urlPach}`)
             response.end();
         };
 
-    // } else if() {
-
-
-
-
-
-    }   
-    
-    else {
+    } else {
         response.statusCode = 400;
         response.setHeader( "Content-Type", "json/application" );
         response.write( "The ID config is not valid!!!\n The user ID must match the UUID." );
@@ -48,23 +38,3 @@ console.log(`gelete => ${urlPach}`)
 
 module.exports.deleteUser = deleteUser;
 module.exports.idSlice = idSlice;
-
-
-
-
-
-// idSlice = urlPach.slice( 8 ); //обрезаем строку запроса для выделения id
-// let indexDelete = arreiUsers.findIndex( function ( item ) {
-// if ( item.id == idSlice );
-// console.log(`item => ${item}`)
-// return item;
-// });
-// console.log(`indexDelete => ${indexDelete}`)
-
-// arreiUsers.splice( indexDelete, 1);
-// response.setHeader("Content-Type", "json/application");
-// response.statusCode = 204;
-// response.write( `DELETE USER in ID => ${idSlice}`);
-// response.end();
-// return idSlice
-// }; 
