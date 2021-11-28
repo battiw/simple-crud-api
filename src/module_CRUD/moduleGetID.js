@@ -19,7 +19,7 @@ let getId = function(urlPach, arreiUsers, response) {
 
             }else {
                 response.setHeader( "Content-Type", "json/application" );
-                response.statusCode = 404;
+                response.statusCode = 400;
                 response.write( "The user with the requested ID was not found." );
                 response.end();
             }
@@ -27,7 +27,7 @@ let getId = function(urlPach, arreiUsers, response) {
         } else {
 
             response.setHeader( "Content-Type", "json/application" );
-            response.statusCode = 400;
+            response.statusCode = 404;
             response.write( "The ID config is not valid!!!\n The user ID must match the UUID 1." );
             response.end();
         };

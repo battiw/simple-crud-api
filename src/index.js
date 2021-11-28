@@ -29,26 +29,33 @@ const server = http.createServer(( request, response ) => {
             } else if ( request.url.startsWith( '/person/') &&  sampleID == true) {
 
                     if ( sampleID == true ) {
-                        
-                        if (  request.method === "GET" ) {
-                            getModuleID.getId( request.url, arreiUsers, response );
+                        try{
+                            if (  request.method === "GET" ) {
+                                getModuleID.getId( request.url, arreiUsers, response );
 
-                        } else if ( request.method === "DELETE" ) {
-                            deleteModule.deleteUser( request.url, request, arreiUsers, response );
+                            } else if ( request.method === "DELETE" ) {
+                                deleteModule.deleteUser( request.url, request, arreiUsers, response );
 
-                        } else if ( request.method === "PUT" ) {
-                            putModule.putUser(request.url, request, arreiUsers, response);
+                            } else if ( request.method === "PUT" ) {
+                                putModule.putUser(request.url, request, arreiUsers, response);
+                            } ;
+
+                        } catch(err) {
+                            response.setHeader( "Content-Type", "json/application" );
+                            response.statusCode = 400;
+                             response.write( "Request is invalid!" );
+                             response.end();
                         };
                 
                     } else {
                         response.setHeader( "Content-Type", "json/application" );
-                        response.statusCode = 405;
+                        response.statusCode = 400;
                         response.write( "The entered ID was not found!" );
                         response.end();
                     };
 
             } else {
-                response.statusCode = 406;
+                response.statusCode = 400;
                 response.setHeader( "Content-Type", "json/application" );
                 response.write( "You entered a request for a non-existent resource. Check the URL." );
                 response.end();

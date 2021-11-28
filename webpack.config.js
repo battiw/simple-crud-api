@@ -7,11 +7,6 @@ if (process.env.NODE_ENV.trim() === "production"){
 }
 console.log(mode)
 module.exports = () => ({
-    // mode: 'development',
-    // mode: 'production',
-
-    // "start:prod": "webpack && node dist/bundle.js",
-    // "start:dev": "nodemon src/server.js"
 
     mode: mode,
     target: 'node',
